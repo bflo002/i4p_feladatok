@@ -1,0 +1,18 @@
+static string elso(string message, string key)
+        {
+            char[] abc = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ' };
+            int[] mt = new int[message.Length];
+            int[] kt = new int[message.Length];
+            char[] rt = new char[message.Length];
+            for (int i = 0; i < message.Length; i++)
+            {
+                mt[i] = Array.IndexOf(abc, message[i]);
+                kt[i] = Array.IndexOf(abc, key[i]);
+            }
+            for (int i = 0; i < mt.Length; i++)
+            {
+                rt[i] = abc[(mt[i] + kt[i])%27];
+            }
+            string v = new string(rt);
+            return v;
+        }
