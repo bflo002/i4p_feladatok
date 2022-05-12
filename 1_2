@@ -1,4 +1,4 @@
-static string eperketto(string uzenet, string key)
+static string eredetiuzenet(string uzenet, string key)
         {
             char[] abc = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ' };
             int[] ut = new int[uzenet.Length];
@@ -9,13 +9,21 @@ static string eperketto(string uzenet, string key)
                 ut[i] = Array.IndexOf(abc, uzenet[i]);
                 kt[i] = Array.IndexOf(abc, key[i]);
             }
-            for (int i = 0; i < ut.Length; i++)
+            for (int i = 0; i < uzenet.Length; i++)
             {
+                Console.WriteLine(ut[i] + " " + kt[i] + "     " + (27 - (ut[i] - kt[i])));
                 if (ut[i] - kt[i] > 0)
                 {
                     rt[i] = abc[ut[i] - kt[i]];
                 }
-                else { rt[i] = abc[(27-ut[i])-kt[i]]; }
+                if (ut[i] - kt[i] == 0)
+                {
+                    rt[i] = abc[ut[i] - kt[i]];
+                }
+                if (ut[i] - kt[i] < 0)
+                { 
+                    rt[i] = abc[((27 - kt[i]) + ut[i])]; 
+                }
             }
             string v = new string(rt);
             return v;
