@@ -4,13 +4,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace felvi
+namespace felvi_2
 {
     class Program
     {
 
 
-        static string elso(string message, string key)
+
+        static string titkosito(string message, string key)
         {
             char[] abc = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ' };
             int[] mt = new int[message.Length];
@@ -29,24 +30,19 @@ namespace felvi
             return v;
         }
 
-
-
-
-
-        static string eredetiuzenet(string uzenet, string key)
+        static string megfejto(string uzenet, string key)
         {
             char[] abc = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ' };
-            int[] ut = new int[key.Length];
-            int[] kt = new int[key.Length];
-            char[] rt = new char[key.Length];
-            for (int i = 0; i < key.Length; i++)
+            int[] ut = new int[uzenet.Length];
+            int[] kt = new int[uzenet.Length];
+            char[] rt = new char[uzenet.Length];
+            for (int i = 0; i < uzenet.Length; i++)
             {
                 ut[i] = Array.IndexOf(abc, uzenet[i]);
                 kt[i] = Array.IndexOf(abc, key[i]);
             }
-            for (int i = 0; i < key.Length; i++)
+            for (int i = 0; i < uzenet.Length; i++)
             {
-                
                 if (ut[i] - kt[i] > 0)
                 {
                     rt[i] = abc[ut[i] - kt[i]];
@@ -56,8 +52,8 @@ namespace felvi
                     rt[i] = abc[ut[i] - kt[i]];
                 }
                 if (ut[i] - kt[i] < 0)
-                {
-                    rt[i] = abc[((27 - kt[i]) + ut[i])];
+                { 
+                    rt[i] = abc[((27 - kt[i]) + ut[i])]; 
                 }
             }
             string v = new string(rt);
@@ -68,83 +64,93 @@ namespace felvi
 
 
 
-
-
         static void Main(string[] args)
-        {
-            /*
-            Console.WriteLine("Adjon meg az uzenetet:");
-            string x = Console.ReadLine();
-            Console.WriteLine("Adjon meg a kulcsot:");
-            string y = Console.ReadLine();
-            Console.WriteLine("A titkosidott kod:");
-            Console.WriteLine(eperketto(x, y));*/
-
-            Random rnd = new Random();
+        {  
             string[] szavak = File.ReadAllLines("words.txt");
+            Random rnd = new Random();
             char[] abc = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ' };
-            string key = "abcdefghijklmnopqrstuvwxyzabcdefghijkl";
+            string key = "abcdefghijklmnopqrstuvwxyz abcdefg";
             string x = "early bird catches the worm";
-            string y = "curiosity killed the cat";
-            string xx = elso(x, key);
-            string yy = elso(y, key);
+            string y = "abcdefghijkljmnopqr";
+            string z = "curiosity killed the cat";
+            string xx = titkosito(x, key);
+            string yy = titkosito(y, key);
+            string zz = titkosito(z, key);
             Console.WriteLine(xx + " : " + yy + "      <- itt a ket titkositott szoveg");
-            //Console.WriteLine(eredetiuzenet(xx,key) + "        " + eredetiuzenet(yy, key));
+            Console.WriteLine(megfejto(xx,key) + " : " + megfejto(yy,key) + "      <- itt a ket megoldott szoveg");
 
 
-                       
 
+
+
+
+
+
+
+            List<string> lista = new List<string>();
+            
+            int g = 0;
             for (int i = 0; i < szavak.Length; i++)
             {
 
-                char[] karakter = xx.Substring(0, szavak[i].Length).ToCharArray();
-                int[] karakterszamok = new int[szavak[i].Length];
-                int[] eredetiszamok = new int[szavak[i].Length];
-                for (int a = 0; a < szavak[i].Length; a++)
+                char[] k = new char[szavak[i].Length];
+                for (int j = 0; j < szavak[i].Length; j++)
                 {
-                    karakterszamok[a] = Array.IndexOf(abc, karakter[a]);
-                    eredetiszamok[a] = Array.IndexOf(abc, szavak[i][a]);
-                    if (karakterszamok[a] > eredetiszamok[a])
+                    if (Array.IndexOf(abc, szavak[i][j]) == Array.IndexOf(abc, xx[j]))
                     {
-                        karakterszamok[a] = karakterszamok[a] - eredetiszamok[a];
+                        k[j] = abc[0];
                     }
-                    if ((karakterszamok[a] - eredetiszamok[a]) == 0)
+                    if (Array.IndexOf(abc, szavak[i][j]) < Array.IndexOf(abc, xx[j]))
                     {
-                        karakterszamok[a] = 0;
+                        k[j] = abc[Array.IndexOf(abc, xx[j]) - Array.IndexOf(abc, szavak[i][j])];
                     }
-                    if (karakterszamok[a] < eredetiszamok[a])
+                    if (Array.IndexOf(abc, szavak[i][j]) > Array.IndexOf(abc, xx[j]))
                     {
-                        karakterszamok[a] = 27 + karakterszamok[a] - eredetiszamok[a];
+                        k[j] = abc[(27 + Array.IndexOf(abc, xx[j])) - Array.IndexOf(abc, szavak[i][j])];
                     }
                 }
+                string ks = new string(k);
+                Console.WriteLine(ks);
 
-                char[] kulcs = new char[karakterszamok.Length];
-                for (int a = 0; a < karakterszamok.Length; a++)
+
+
+                for (int l = 0; l < szavak.Length; l++)
                 {
-                    kulcs[a] = abc[karakterszamok[a]];
+                    if (szavak[l].Length <= ks.Length)
+                    {
+                        if (szavak.Contains(megfejto(xx.Substring(0, szavak[i].Length), ks)) && szavak[l].Substring(0, szavak[l].Length) == megfejto(zz.Substring(0, ks.Length), ks))
+                        {
+                            if (!lista.Contains(ks))
+                            {
+                                lista.Add(ks);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (szavak.Contains(megfejto(xx.Substring(0, szavak[i].Length), ks)) && szavak[l].Substring(0, ks.Length) == megfejto(zz.Substring(0, ks.Length), ks))
+                        {
+                            if (!lista.Contains(ks))
+                            {
+                                lista.Add(ks);
+                            }
+                        }
+                    }
+                    
                 }
-                string kulcsstring = new string(kulcs);
-
-                
-                Console.WriteLine(kulcsstring);
-                if (szavak.Contains(eredetiuzenet(yy, kulcsstring)))
-                {
-                    Console.WriteLine("kepzett szo: " + eredetiuzenet(yy, kulcsstring));
-                    //Console.WriteLine(kulcsstring);
-                    Console.WriteLine("kepzett szo: " + eredetiuzenet(xx, kulcsstring));
-                }
-
 
             }
 
 
-            Console.WriteLine(eredetiuzenet(xx,"abcdefghijkl"));
-            Console.ReadLine();
 
-
-            
-
-
+            Console.WriteLine("Lehetseges kod kezdetek");
+            lista.Sort();
+            for (int i = 0; i < lista.Count; i++)
+            {
+                Console.WriteLine(lista[i]);
+                g++;
+            }
+            Console.WriteLine(g + "db");
         }
     }
 }
