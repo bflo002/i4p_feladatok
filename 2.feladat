@@ -9,8 +9,7 @@ namespace felvi_2
     class Program
     {
 
-
-
+        #region titkosito
         static string titkosito(string message, string key)
         {
             char[] abc = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ' };
@@ -29,6 +28,8 @@ namespace felvi_2
             string v = new string(rt);
             return v;
         }
+#endregion
+        #region megfejto
 
         static string megfejto(string uzenet, string key)
         {
@@ -59,15 +60,82 @@ namespace felvi_2
             string v = new string(rt);
             return v;
         }
+#endregion
+        #region lehetosegfuggveny
+
+        static string[] lehetosegfuggveny(string xx, string zz, int kezdet)
+        {
+            string[] szavak = File.ReadAllLines("words.txt");
+            char[] abc = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ' };
+
+            List<string> lista = new List<string>();
+
+            int g = 0;
+            for (int i = 0; i < szavak.Length; i++)
+            {
+
+                char[] k = new char[szavak[i].Length];
+                for (int j = kezdet; j < szavak[i].Length + kezdet; j++)
+                {
+                    if (Array.IndexOf(abc, szavak[i][j]) == Array.IndexOf(abc, xx[j]))
+                    {
+                        k[j] = abc[0];
+                    }
+                    if (Array.IndexOf(abc, szavak[i][j]) < Array.IndexOf(abc, xx[j + kezdet]))
+                    {
+                        k[j] = abc[Array.IndexOf(abc, xx[j]) - Array.IndexOf(abc, szavak[i][j])];
+                    }
+                    if (Array.IndexOf(abc, szavak[i][j]) > Array.IndexOf(abc, xx[j]))
+                    {
+                        k[j] = abc[(27 + Array.IndexOf(abc, xx[j])) - Array.IndexOf(abc, szavak[i][j])];
+                    }
+                }
+                string ks = new string(k);
 
 
 
+                for (int l = 0; l < szavak.Length; l++)
+                {
+                    if (szavak[l].Length <= ks.Length)
+                    {
+                        for (int f = 0; f < szavak.Length; f++)
+                        {
+                            if (szavak[i].Contains(megfejto(xx.Substring(kezdet, szavak[i].Length), ks)) && szavak[l].Substring(kezdet, szavak[l].Length) == megfejto(zz.Substring(kezdet, ks.Length), ks))
+                            {
+                                if (!lista.Contains(ks))
+                                {
+                                    lista.Add(ks);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int f = 0; f < szavak.Length; f++)
+                        {
+                            if (szavak[i].Contains(megfejto(xx.Substring(kezdet, szavak[i].Length), ks)) && szavak[l].Substring(kezdet, ks.Length) == megfejto(zz.Substring(kezdet, ks.Length), ks))
+                            {
+                                if (!lista.Contains(ks))
+                                {
+                                    lista.Add(ks);
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            string[] sorted = lista.ToArray();
+            Array.Sort(sorted, (x, y) => x.Length.CompareTo(y.Length));
+            return sorted;
+        }
 
+        #endregion
 
         static void Main(string[] args)
-        {  
+        {
+            #region kodletrehozas
             string[] szavak = File.ReadAllLines("words.txt");
-            Random rnd = new Random();
             char[] abc = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ' };
             string key = "abcdefghijklmnopqrstuvwxyz abcdefg";
             string x = "early bird catches the worm";
@@ -78,79 +146,85 @@ namespace felvi_2
             string zz = titkosito(z, key);
             Console.WriteLine(xx + " : " + yy + "      <- itt a ket titkositott szoveg");
             Console.WriteLine(megfejto(xx,key) + " : " + megfejto(yy,key) + "      <- itt a ket megoldott szoveg");
+            #endregion
 
 
-
-
-
-
-
-
-
-            List<string> lista = new List<string>();
-            
-            int g = 0;
-            for (int i = 0; i < szavak.Length; i++)
+            string[] alma = lehetosegfuggveny(xx, zz, 1);
+            for (int i = 0; i < alma.Length; i++)
             {
-
-                char[] k = new char[szavak[i].Length];
-                for (int j = 0; j < szavak[i].Length; j++)
-                {
-                    if (Array.IndexOf(abc, szavak[i][j]) == Array.IndexOf(abc, xx[j]))
-                    {
-                        k[j] = abc[0];
-                    }
-                    if (Array.IndexOf(abc, szavak[i][j]) < Array.IndexOf(abc, xx[j]))
-                    {
-                        k[j] = abc[Array.IndexOf(abc, xx[j]) - Array.IndexOf(abc, szavak[i][j])];
-                    }
-                    if (Array.IndexOf(abc, szavak[i][j]) > Array.IndexOf(abc, xx[j]))
-                    {
-                        k[j] = abc[(27 + Array.IndexOf(abc, xx[j])) - Array.IndexOf(abc, szavak[i][j])];
-                    }
-                }
-                string ks = new string(k);
-                Console.WriteLine(ks);
-
-
-
-                for (int l = 0; l < szavak.Length; l++)
-                {
-                    if (szavak[l].Length <= ks.Length)
-                    {
-                        if (szavak.Contains(megfejto(xx.Substring(0, szavak[i].Length), ks)) && szavak[l].Substring(0, szavak[l].Length) == megfejto(zz.Substring(0, ks.Length), ks))
-                        {
-                            if (!lista.Contains(ks))
-                            {
-                                lista.Add(ks);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (szavak.Contains(megfejto(xx.Substring(0, szavak[i].Length), ks)) && szavak[l].Substring(0, ks.Length) == megfejto(zz.Substring(0, ks.Length), ks))
-                        {
-                            if (!lista.Contains(ks))
-                            {
-                                lista.Add(ks);
-                            }
-                        }
-                    }
-                    
-                }
-
+                Console.WriteLine(alma[i]);
             }
 
+            /*
 
 
-            Console.WriteLine("Lehetseges kod kezdetek");
-            lista.Sort();
-            for (int i = 0; i < lista.Count; i++)
-            {
-                Console.WriteLine(lista[i]);
-                g++;
-            }
-            Console.WriteLine(g + "db");
+                        string[] lehetsegesek = { "e", "x", "ln", "mh", "mo", "rv", "xk", "rti", "ybgi", "abcde" };
+
+
+                        int leng = 0;
+                        if (xx.Length > zz.Length)
+                        {
+                            leng = xx.Length;
+                        }
+                        else
+                        {
+                            leng = zz.Length;
+                        }
+
+
+
+
+
+                        char[] megoldas = new char[leng];
+                        bool ek = true;
+                        bool ev = true;
+                        int lehetsegesint = lehetsegesek.Length;
+                        //addig megy amig meg nincs az x karakter
+                        while (ev)
+                        {
+                            if (ek)    //megnézi, hogy melyik mondatba kell behelyettesíteni
+                            {
+
+                                //visszahelyettesítjük a második mondatba  ahol megkapunk egy szot
+                                for (int i = 0; i < szavak.Length; i++)
+                                {
+                                    string a = megfejto(zz.Substring(0, lehetsegesek[lehetsegesint].Length), lehetsegesek[lehetsegesint]);
+                                    if (szavak[i].Contains(a))
+                                    {
+                                        Console.WriteLine(szavak[i]);
+                                    }
+                                }
+
+
+
+
+
+
+
+
+                            } else
+                            {
+
+
+
+
+
+
+
+
+
+                            }
+
+
+
+
+
+
+
+                        } */
+
+
         }
     }
 }
+
