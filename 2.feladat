@@ -77,20 +77,25 @@ namespace felvi_2
                 char[] k = new char[szavak[i].Length];
                 for (int j = kezdet; j < szavak[i].Length + kezdet; j++)
                 {
-                    if (Array.IndexOf(abc, szavak[i][j]) == Array.IndexOf(abc, xx[j]))
+                    if (xx.Length  >= (kezdet + szavak[i].Length))
                     {
-                        k[j] = abc[0];
+                        if (Array.IndexOf(abc, szavak[i][j - kezdet]) == Array.IndexOf(abc, xx[j]))
+                        {
+                            k[j - kezdet] = abc[0];
+                        }
+                        if (Array.IndexOf(abc, szavak[i][j - kezdet]) < Array.IndexOf(abc, xx[j]))
+                        {
+                            k[j - kezdet] = abc[Array.IndexOf(abc, xx[j]) - Array.IndexOf(abc, szavak[i][j - kezdet])];
+                        }
+                        if (Array.IndexOf(abc, szavak[i][j - kezdet]) > Array.IndexOf(abc, xx[j]))
+                        {
+                            k[j - kezdet] = abc[(27 + Array.IndexOf(abc, xx[j])) - Array.IndexOf(abc, szavak[i][j - kezdet])];
+                        }
                     }
-                    if (Array.IndexOf(abc, szavak[i][j]) < Array.IndexOf(abc, xx[j + kezdet]))
-                    {
-                        k[j] = abc[Array.IndexOf(abc, xx[j]) - Array.IndexOf(abc, szavak[i][j])];
-                    }
-                    if (Array.IndexOf(abc, szavak[i][j]) > Array.IndexOf(abc, xx[j]))
-                    {
-                        k[j] = abc[(27 + Array.IndexOf(abc, xx[j])) - Array.IndexOf(abc, szavak[i][j])];
-                    }
+                    
                 }
                 string ks = new string(k);
+                Console.WriteLine(ks);
 
 
 
@@ -98,30 +103,26 @@ namespace felvi_2
                 {
                     if (szavak[l].Length <= ks.Length)
                     {
-                        for (int f = 0; f < szavak.Length; f++)
+                        
+                        if (szavak[i].Contains(megfejto(xx.Substring(kezdet, szavak[i].Length), ks)) && szavak[l].Contains(megfejto(zz.Substring(kezdet, szavak[i].Length), ks)))
                         {
-                            if (szavak[i].Contains(megfejto(xx.Substring(kezdet, szavak[i].Length), ks)) && szavak[l].Substring(kezdet, szavak[l].Length) == megfejto(zz.Substring(kezdet, ks.Length), ks))
+                            if (!lista.Contains(ks))
                             {
-                                if (!lista.Contains(ks))
-                                {
-                                    lista.Add(ks);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (int f = 0; f < szavak.Length; f++)
-                        {
-                            if (szavak[i].Contains(megfejto(xx.Substring(kezdet, szavak[i].Length), ks)) && szavak[l].Substring(kezdet, ks.Length) == megfejto(zz.Substring(kezdet, ks.Length), ks))
-                            {
-                                if (!lista.Contains(ks))
-                                {
-                                    lista.Add(ks);
-                                }
+                                lista.Add(ks);
                             }
                         }
                         
+                    }
+                    else
+                    {
+                        if (szavak[i].Contains(megfejto(xx.Substring(kezdet, szavak[i].Length), ks)) && szavak[l].Contains(megfejto(zz.Substring(kezdet, szavak[i].Length), ks)))
+                        {
+                            if (!lista.Contains(ks))
+                            {
+                                lista.Add(ks);
+                            }
+                        }
+
                     }
                 }
             }
@@ -149,79 +150,13 @@ namespace felvi_2
             #endregion
 
 
-            string[] alma = lehetosegfuggveny(xx, zz, 1);
+            string[] alma = lehetosegfuggveny(xx, zz, 0);
             for (int i = 0; i < alma.Length; i++)
             {
                 Console.WriteLine(alma[i]);
             }
 
-            /*
-
-
-                        string[] lehetsegesek = { "e", "x", "ln", "mh", "mo", "rv", "xk", "rti", "ybgi", "abcde" };
-
-
-                        int leng = 0;
-                        if (xx.Length > zz.Length)
-                        {
-                            leng = xx.Length;
-                        }
-                        else
-                        {
-                            leng = zz.Length;
-                        }
-
-
-
-
-
-                        char[] megoldas = new char[leng];
-                        bool ek = true;
-                        bool ev = true;
-                        int lehetsegesint = lehetsegesek.Length;
-                        //addig megy amig meg nincs az x karakter
-                        while (ev)
-                        {
-                            if (ek)    //megnézi, hogy melyik mondatba kell behelyettesíteni
-                            {
-
-                                //visszahelyettesítjük a második mondatba  ahol megkapunk egy szot
-                                for (int i = 0; i < szavak.Length; i++)
-                                {
-                                    string a = megfejto(zz.Substring(0, lehetsegesek[lehetsegesint].Length), lehetsegesek[lehetsegesint]);
-                                    if (szavak[i].Contains(a))
-                                    {
-                                        Console.WriteLine(szavak[i]);
-                                    }
-                                }
-
-
-
-
-
-
-
-
-                            } else
-                            {
-
-
-
-
-
-
-
-
-
-                            }
-
-
-
-
-
-
-
-                        } */
+            
 
 
         }
