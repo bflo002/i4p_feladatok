@@ -1,76 +1,10 @@
-using System;
-using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace felvi_2
-{
-    class Program
-    {
-
-        #region titkosito
-        static string titkosito(string message, string key)
-        {
-            char[] abc = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ' };
-            int[] mt = new int[message.Length];
-            int[] kt = new int[message.Length];
-            char[] rt = new char[message.Length];
-            for (int i = 0; i < message.Length; i++)
-            {
-                mt[i] = Array.IndexOf(abc, message[i]);
-                kt[i] = Array.IndexOf(abc, key[i]);
-            }
-            for (int i = 0; i < mt.Length; i++)
-            {
-                rt[i] = abc[(mt[i] + kt[i]) % 27];
-            }
-            string v = new string(rt);
-            return v;
-        }
-#endregion
-        #region megfejto
-
-        static string megfejto(string uzenet, string key)
-        {
-            char[] abc = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ' };
-            int[] ut = new int[uzenet.Length];
-            int[] kt = new int[uzenet.Length];
-            char[] rt = new char[uzenet.Length];
-            for (int i = 0; i < uzenet.Length; i++)
-            {
-                ut[i] = Array.IndexOf(abc, uzenet[i]);
-                kt[i] = Array.IndexOf(abc, key[i]);
-            }
-            for (int i = 0; i < uzenet.Length; i++)
-            {
-                if (ut[i] - kt[i] > 0)
-                {
-                    rt[i] = abc[ut[i] - kt[i]];
-                }
-                if (ut[i] - kt[i] == 0)
-                {
-                    rt[i] = abc[ut[i] - kt[i]];
-                }
-                if (ut[i] - kt[i] < 0)
-                { 
-                    rt[i] = abc[((27 - kt[i]) + ut[i])]; 
-                }
-            }
-            string v = new string(rt);
-            return v;
-        }
-#endregion
-        #region lehetosegfuggveny
-
-        static string[] lehetosegfuggveny(string xx, string zz, int kezdet)
+static string[] lehetosegfuggveny(string xx, string zz, int kezdet)
         {
             string[] szavak = File.ReadAllLines("words.txt");
             char[] abc = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ' };
 
             List<string> lista = new List<string>();
 
-            int g = 0;
             for (int i = 0; i < szavak.Length; i++)
             {
 
@@ -95,34 +29,33 @@ namespace felvi_2
                     
                 }
                 string ks = new string(k);
-                Console.WriteLine(ks);
 
-
+                //Megneztuk, hogy az i-edik szohoz milyen kulcsot kellett volna rendelni
 
                 for (int l = 0; l < szavak.Length; l++)
                 {
-                    if (szavak[l].Length <= ks.Length)
+                    if (megfejto(zz.Substring(kezdet,ks.Length),ks).Contains(' ') && !lista.Contains(ks))
                     {
-                        
-                        if (szavak[i].Contains(megfejto(xx.Substring(kezdet, szavak[i].Length), ks)) && szavak[l].Contains(megfejto(zz.Substring(kezdet, szavak[i].Length), ks)))
+                        if (megfejto(zz.Substring(kezdet, ks.Length), ks).Split(' ')[0].Length > megfejto(zz.Substring(kezdet, ks.Length), ks).Split(' ')[1].Length && szavak[l].Contains(megfejto(zz.Substring(kezdet, ks.Length), ks).Split(' ')[0]))     //ha az elso fele hosszabb
                         {
-                            if (!lista.Contains(ks))
-                            {
-                                lista.Add(ks);
-                            }
+                            lista.Add(ks);
                         }
-                        
+                        if (megfejto(zz.Substring(kezdet, ks.Length), ks).Split(' ')[0].Length < megfejto(zz.Substring(kezdet, ks.Length), ks).Split(' ')[1].Length && szavak[l].Contains(megfejto(zz.Substring(kezdet, ks.Length), ks).Split(' ')[1]))     //ha az elso fele hosszabb
+                        {
+                            lista.Add(ks);
+                        }
+                        if (ks.Length == 1)
+                        {
+                            lista.Add(ks);
+                        }
+
                     }
                     else
                     {
-                        if (szavak[i].Contains(megfejto(xx.Substring(kezdet, szavak[i].Length), ks)) && szavak[l].Contains(megfejto(zz.Substring(kezdet, szavak[i].Length), ks)))
+                        if (szavak[l].Contains(megfejto(zz.Substring(kezdet, ks.Length),ks)) && !lista.Contains(ks))
                         {
-                            if (!lista.Contains(ks))
-                            {
-                                lista.Add(ks);
-                            }
+                            lista.Add(ks);
                         }
-
                     }
                 }
             }
@@ -130,36 +63,3 @@ namespace felvi_2
             Array.Sort(sorted, (x, y) => x.Length.CompareTo(y.Length));
             return sorted;
         }
-
-        #endregion
-
-        static void Main(string[] args)
-        {
-            #region kodletrehozas
-            string[] szavak = File.ReadAllLines("words.txt");
-            char[] abc = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', ' ' };
-            string key = "abcdefghijklmnopqrstuvwxyz abcdefg";
-            string x = "early bird catches the worm";
-            string y = "abcdefghijkljmnopqr";
-            string z = "curiosity killed the cat";
-            string xx = titkosito(x, key);
-            string yy = titkosito(y, key);
-            string zz = titkosito(z, key);
-            Console.WriteLine(xx + " : " + yy + "      <- itt a ket titkositott szoveg");
-            Console.WriteLine(megfejto(xx,key) + " : " + megfejto(yy,key) + "      <- itt a ket megoldott szoveg");
-            #endregion
-
-
-            string[] alma = lehetosegfuggveny(xx, zz, 0);
-            for (int i = 0; i < alma.Length; i++)
-            {
-                Console.WriteLine(alma[i]);
-            }
-
-            
-
-
-        }
-    }
-}
-
