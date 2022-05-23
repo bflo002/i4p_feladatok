@@ -39,10 +39,12 @@ static string[] lehetosegfuggveny(string xx, string zz, int kezdet)
                         if (megfejto(zz.Substring(kezdet, ks.Length), ks).Split(' ')[0].Length > megfejto(zz.Substring(kezdet, ks.Length), ks).Split(' ')[1].Length && szavak[l].Contains(megfejto(zz.Substring(kezdet, ks.Length), ks).Split(' ')[0]))     //ha az elso fele hosszabb
                         {
                             lista.Add(ks);
+                            Console.WriteLine(megfejto(zz.Substring(kezdet, ks.Length), ks).Split(' ')[0]);
                         }
                         if (megfejto(zz.Substring(kezdet, ks.Length), ks).Split(' ')[0].Length < megfejto(zz.Substring(kezdet, ks.Length), ks).Split(' ')[1].Length && szavak[l].Contains(megfejto(zz.Substring(kezdet, ks.Length), ks).Split(' ')[1]))     //ha az elso fele hosszabb
                         {
                             lista.Add(ks);
+                            Console.WriteLine(megfejto(zz.Substring(kezdet, ks.Length), ks).Split(' ')[1]);
                         }
                         if (ks.Length == 1)
                         {
@@ -55,11 +57,13 @@ static string[] lehetosegfuggveny(string xx, string zz, int kezdet)
                         if (szavak[l].Contains(megfejto(zz.Substring(kezdet, ks.Length),ks)) && !lista.Contains(ks))
                         {
                             lista.Add(ks);
+                            Console.WriteLine(megfejto(zz.Substring(kezdet, ks.Length), ks));
                         }
                     }
                 }
             }
+
+
             string[] sorted = lista.ToArray();
-            Array.Sort(sorted, (x, y) => x.Length.CompareTo(y.Length));
-            return sorted;
+            Array.Sort(sorted, (y, x) => x.Length.CompareTo(y.Length));            return sorted;
         }
